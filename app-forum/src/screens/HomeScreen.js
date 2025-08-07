@@ -18,6 +18,7 @@ import api from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker"; // <-- Novo
+import Header from "../components/Header";
 
 const HomeScreen = ({ navigation }) => {
   const { signOut } = useContext(AuthContext);
@@ -279,18 +280,6 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
-  const handleLogout = () => {
-    Alert.alert("Sair", "Deseja realmente sair?", [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Sair",
-        onPress: async () => {
-          await signOut();
-        },
-      },
-    ]);
-  };
-
   const renderPostItem = ({ item }) => (
     <View style={styles.postCard}>
       <View style={styles.postHeader}>
@@ -350,18 +339,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.mainTitle}>Fórum do App</Text>
-        <View style={styles.headerButtons}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Profile")}
-            style={styles.profileButton}
-          >
-            <Ionicons name="person-circle-outline" size={30} color="#007bff" />
-          </TouchableOpacity>
-          <Button title="Sair" onPress={handleLogout} />
-        </View>
-      </View>
+      <Header title={"Fórum do App"} />
 
       <View style={{ maxWidth: "800px", marginHorizontal: "auto", width: "100%" }}>
         {/* Barra de Pesquisa */}
@@ -443,28 +421,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f0f2f5",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    backgroundColor: "#fff",
-  },
-  mainTitle: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  headerButtons: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  profileButton: {
-    marginRight: 15,
   },
   searchContainer: {
     flexDirection: "row",

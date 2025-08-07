@@ -11,6 +11,7 @@ import api from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import Header from '../components/Header';
 
 const EditProfileScreen = ({ route, navigation }) => {
   const { user: initialUser } = route.params;
@@ -142,13 +143,7 @@ const EditProfileScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={28} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Editar Perfil</Text>
-        <View style={{ width: 28 }} />
-      </View>
+      <Header title={"Editar Perfil"} />
 
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <TouchableOpacity onPress={pickImage} style={styles.profilePictureContainer}>
@@ -213,25 +208,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f0f2f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    paddingTop: 40,
-  },
-  backButton: {
-    padding: 5,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
   },
   scrollViewContent: {
     padding: 20,

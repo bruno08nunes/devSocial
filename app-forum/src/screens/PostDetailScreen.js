@@ -7,6 +7,7 @@ import api from '../services/api';
 import AuthContext from '../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import Header from '../components/Header';
 
 const PostDetailScreen = ({ route, navigation }) => {
   const { postId } = route.params;
@@ -110,13 +111,7 @@ const PostDetailScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={28} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Detalhes do Post</Text>
-        <View style={{ width: 28 }} />
-      </View>
+      <Header title={"Detalhes do Post"} />
 
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {/* Detalhes do Post */}
@@ -178,25 +173,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    paddingTop: 40, // Para iOS SafeArea
-  },
-  backButton: {
-    padding: 5,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
   },
   scrollViewContent: {
     paddingBottom: 20, // Espaçamento inferior para a scrollview

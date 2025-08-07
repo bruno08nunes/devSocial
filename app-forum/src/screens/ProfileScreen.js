@@ -9,6 +9,7 @@ import AuthContext from '../context/AuthContext';
 import api from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import Header from '../components/Header';
 
 const ProfileScreen = ({ navigation }) => {
   const { signOut } = useContext(AuthContext);
@@ -95,15 +96,7 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={28} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Meu Perfil</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('EditProfile', { user })} style={styles.editButton}>
-          <Ionicons name="settings-outline" size={24} color="#007bff" />
-        </TouchableOpacity>
-      </View>
+      <Header title={"Perfil"} user={user} />
 
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {/* Informações do Usuário */}
@@ -175,27 +168,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  backButton: {
-    padding: 5,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  editButton: {
-    padding: 5,
   },
   scrollViewContent: {
     paddingBottom: 20,
