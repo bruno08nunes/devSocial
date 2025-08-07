@@ -71,24 +71,20 @@ const HomeScreen = ({ navigation }) => {
       // Atualiza o estado de likes do usuário com base nos posts buscados
       // Para o feedback visual persistente, esta parte é crucial
       let initialUserLikes = {};
-      if (currentUserId) {
-        try {
-          const likesResponse = await api.get(`/users/${currentUserId}/likes`, {
-            headers: {
-              Authorization: `Bearer ${await AsyncStorage.getItem(
-                "userToken"
-              )}`,
-            },
-          });
-          likesResponse.data.forEach((like) => {
-            initialUserLikes[like.post_id] = true;
-          });
-        } catch (likesError) {
-          console.error(
-            "Erro ao buscar likes do usuário para inicialização:",
-            likesError.response?.data || likesError.message
-          );
-        }
+      try {
+        const likesResponse = await api.get(`/users/likes`, {
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("userToken")}`,
+          },
+        });
+        likesResponse.data.forEach((like) => {
+          initialUserLikes[like.post_id] = true;
+        });
+      } catch (likesError) {
+        console.error(
+          "Erro ao buscar likes do usuário para inicialização:",
+          likesError.response?.data || likesError.message
+        );
       }
       setUserLikes(initialUserLikes);
 
@@ -341,7 +337,9 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Header title={"Fórum do App"} />
 
-      <View style={{ maxWidth: "800px", marginHorizontal: "auto", width: "100%" }}>
+      <View
+        style={{ maxWidth: "800px", marginHorizontal: "auto", width: "100%" }}
+      >
         {/* Barra de Pesquisa */}
         <View style={styles.searchContainer}>
           <TextInput
