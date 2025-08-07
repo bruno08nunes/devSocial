@@ -185,7 +185,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
-    paddingTop: 40,
   },
   backButton: {
     padding: 5,
@@ -200,6 +199,9 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     paddingBottom: 20,
+    maxWidth: "800px",
+    width: "100%",
+    marginHorizontal: "auto"
   },
   profileInfoCard: {
     backgroundColor: '#fff',

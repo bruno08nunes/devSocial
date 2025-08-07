@@ -200,6 +200,9 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     paddingBottom: 20, // Espaçamento inferior para a scrollview
+    maxWidth: "800px",
+    marginHorizontal: "auto",
+    width: "100%"
   },
   postDetailCard: {
     backgroundColor: '#fff',
@@ -295,6 +298,9 @@ const styles = StyleSheet.create({
   },
   commentProfilePicturePlaceholder: {
     marginRight: 8,
+  },
+  noCommentsText: {
+    paddingLeft: 30
   },
   commentUsername: {
     fontWeight: 'bold',

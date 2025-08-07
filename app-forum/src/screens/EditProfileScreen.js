@@ -236,10 +236,13 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     padding: 20,
     alignItems: 'center',
+    maxWidth: "800px",
+    marginHorizontal: "auto",
+    width: "100%"
   },
   profilePictureContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: "40px"
   },
   profilePicture: {
     width: 120,
@@ -255,6 +258,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0e0e0',
     justifyContent: 'center',
     alignItems: 'center',
+    display: "flex"
   },
   changePhotoText: {
     marginTop: 10,
