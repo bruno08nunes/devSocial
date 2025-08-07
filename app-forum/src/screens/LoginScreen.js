@@ -38,7 +38,9 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
       <Button title="Entrar" onPress={handleLogin} />
+      </View>
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.registerText}>Não tem uma conta? Cadastre-se</Text>
       </TouchableOpacity>
@@ -50,15 +52,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    margin: "auto",
+    width: "100%",
+    maxWidth: "800px"
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 30,
     color: '#333',
+    textAlign: "center"
   },
   input: {
     width: '100%',
@@ -73,6 +77,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: '#007bff',
     textDecorationLine: 'underline',
+    textAlign: "center"
   },
 });
 

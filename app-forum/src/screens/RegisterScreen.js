@@ -1,23 +1,41 @@
 // src/screens/RegisterScreen.js
 
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import api from '../services/api'; // Importa a instância do Axios
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import api from "../services/api"; // Importa a instância do Axios
 
 const RegisterScreen = ({ navigation }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleRegister = async () => {
     try {
-      const response = await api.post('/auth/register', { username, email, password });
+      const response = await api.post("/auth/register", {
+        username,
+        email,
+        password,
+      });
       // console.log('Cadastro bem-sucedido:', response.data);
-      Alert.alert('Sucesso', 'Usuário cadastrado com sucesso! Faça login para continuar.');
-      navigation.navigate('Login'); // Volta para a tela de login após o cadastro
+      Alert.alert(
+        "Sucesso",
+        "Usuário cadastrado com sucesso! Faça login para continuar."
+      );
+      navigation.navigate("Login"); // Volta para a tela de login após o cadastro
     } catch (error) {
-      console.error('Erro no cadastro:', error.response?.data || error.message);
-      Alert.alert('Erro no Cadastro', error.response?.data?.message || 'Ocorreu um erro ao tentar cadastrar.');
+      console.error("Erro no cadastro:", error.response?.data || error.message);
+      Alert.alert(
+        "Erro no Cadastro",
+        error.response?.data?.message || "Ocorreu um erro ao tentar cadastrar."
+      );
     }
   };
 
@@ -46,8 +64,10 @@ const RegisterScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Cadastrar" onPress={handleRegister} />
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+      <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+        <Button title="Cadastrar" onPress={handleRegister} />
+      </View>
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <Text style={styles.loginText}>Já tem uma conta? Faça login</Text>
       </TouchableOpacity>
     </View>
@@ -57,30 +77,33 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    margin: "auto",
+    width: "100%",
+    maxWidth: "800px",
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 30,
-    color: '#333',
+    color: "#333",
+    textAlign: "center",
   },
   input: {
-    width: '100%',
+    width: "100%",
     padding: 15,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     marginBottom: 15,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   loginText: {
     marginTop: 20,
-    color: '#007bff',
-    textDecorationLine: 'underline',
+    color: "#007bff",
+    textDecorationLine: "underline",
+    textAlign: "center",
   },
 });
 
