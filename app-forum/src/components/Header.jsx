@@ -16,15 +16,7 @@ const Header = ({ title, user }) => {
   const { signOut } = useContext(AuthContext);
 
   const handleLogout = () => {
-    Alert.alert("Sair", "Deseja realmente sair?", [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Sair",
-        onPress: async () => {
-          await signOut();
-        },
-      },
-    ]);
+    signOut();
   };
 
   return (
