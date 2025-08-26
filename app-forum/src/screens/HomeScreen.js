@@ -21,6 +21,11 @@ import * as ImagePicker from "expo-image-picker"; // <-- Novo
 import Header from "../components/Header";
 import PostItem from "../components/PostItem";
 import { fetchPosts } from "../utils/fetchPosts";
+import { getUserData } from "../utils/getUserData";
+import { requestMediaLibraryPermissions } from "../utils/requestMediaLibraryPermissions";
+import { uploadImage } from "../utils/uploadImage";
+import { likePost } from "../utils/likePost";
+import { favoritePost } from "../utils/favoritePost";
 
 const HomeScreen = ({ navigation }) => {
     const { signOut } = useContext(AuthContext);
@@ -36,33 +41,12 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         const loadUserId = async () => {
-            try {
-                const userDataString = await AsyncStorage.getItem("userData");
-                if (userDataString) {
-                    const userData = JSON.parse(userDataString);
-                    setCurrentUserId(userData.id);
-                }
-            } catch (error) {
-                console.error(
-                    "Erro ao carregar dados do usuário do AsyncStorage:",
-                    error
-                );
-            }
+            const userData = await getUserData();
+            setCurrentUserId(userData.id);
         };
         loadUserId();
         getPosts();
-
-        // Pedir permissão para acessar a galeria de imagens
-        (async () => {
-            const { status } =
-                await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== "granted") {
-                Alert.alert(
-                    "Permissão Negada",
-                    "Desculpe, precisamos de permissões de galeria para isso funcionar!"
-                );
-            }
-        })();
+        requestMediaLibraryPermissions();
     }, [searchTerm, currentUserId]);
 
     const getPosts = async () => {
@@ -97,8 +81,8 @@ const HomeScreen = ({ navigation }) => {
             );
             return;
         }
-
         setIsSubmitting(true);
+
         try {
             const userToken = await AsyncStorage.getItem("userToken");
             if (!userToken) {
@@ -110,40 +94,14 @@ const HomeScreen = ({ navigation }) => {
                 return;
             }
 
-            let imageUrlToSave = null;
-            if (newPostImageUri) {
-                // Faça o upload da imagem do post primeiro
-                const formData = new FormData();
-                formData.append("postImage", {
-                    uri: newPostImageUri,
-                    name: `post_${currentUserId}_${Date.now()}.jpg`,
-                    type: "image/jpeg",
-                });
-
-                try {
-                    const uploadResponse = await api.post(
-                        "/upload/post-image",
-                        formData,
-                        {
-                            headers: {
-                                "Content-Type": "multipart/form-data",
-                                Authorization: `Bearer ${userToken}`,
-                            },
-                        }
-                    );
-                    imageUrlToSave = uploadResponse.data.imageUrl; // URL retornada pelo backend
-                } catch (uploadError) {
-                    console.error(
-                        "Erro ao fazer upload da imagem do post:",
-                        uploadError.response?.data || uploadError.message
-                    );
-                    Alert.alert(
-                        "Erro de Upload",
-                        "Não foi possível fazer upload da imagem do post."
-                    );
-                    setIsSubmitting(false);
-                    return;
-                }
+            const imageUrlToSave = await uploadImage({
+                currentUserId,
+                newPostImageUri,
+                userToken,
+            });
+            if (!imageUrlToSave) {
+                setIsSubmitting(false);
+                return;
             }
 
             await api.post(
@@ -184,22 +142,11 @@ const HomeScreen = ({ navigation }) => {
 
     const handleToggleLike = async (postId) => {
         try {
-            const userToken = await AsyncStorage.getItem("userToken");
-            if (!userToken) {
-                Alert.alert(
-                    "Erro",
-                    "Você precisa estar logado para curtir posts."
-                );
+            const liked = await likePost(postId);
+            if (liked === null) {
                 signOut();
-                return;
             }
-            const response = await api.post(
-                `/posts/${postId}/like`,
-                {},
-                { headers: { Authorization: `Bearer ${userToken}` } }
-            );
 
-            const liked = response.data.liked;
             setUserLikes((prevLikes) => ({
                 ...prevLikes,
                 [postId]: liked,
@@ -237,38 +184,9 @@ const HomeScreen = ({ navigation }) => {
     };
 
     const handleToggleFavorite = async (postId) => {
-        try {
-            const userToken = await AsyncStorage.getItem("userToken");
-            if (!userToken) {
-                Alert.alert(
-                    "Erro",
-                    "Você precisa estar logado para favoritar posts."
-                );
-                signOut();
-                return;
-            }
-            const response = await api.post(
-                `/posts/${postId}/favorite`,
-                {},
-                { headers: { Authorization: `Bearer ${userToken}` } }
-            );
-            Alert.alert("Sucesso", response.data.message);
-        } catch (error) {
-            console.error(
-                "Erro ao favoritar/desfavoritar:",
-                error.response?.data || error.message
-            );
-            Alert.alert(
-                "Erro",
-                error.response?.data?.message ||
-                    "Não foi possível processar o favorito."
-            );
-            if (
-                error.response?.status === 401 ||
-                error.response?.status === 403
-            ) {
-                signOut();
-            }
+        const favoritedPost = await favoritePost(postId);
+        if (favoritedPost === null) {
+            signOut();
         }
     };
 
@@ -355,7 +273,15 @@ const HomeScreen = ({ navigation }) => {
                     <FlatList
                         data={posts}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => <PostItem item={item} handleToggleFavorite={handleToggleFavorite} handleToggleLike={handleToggleLike} navigation={navigation} userLikes={userLikes} />}
+                        renderItem={({ item }) => (
+                            <PostItem
+                                item={item}
+                                handleToggleFavorite={handleToggleFavorite}
+                                handleToggleLike={handleToggleLike}
+                                navigation={navigation}
+                                userLikes={userLikes}
+                            />
+                        )}
                         contentContainerStyle={styles.postList}
                         ListEmptyComponent={
                             <Text style={styles.noPostsText}>
