@@ -28,6 +28,7 @@ const HomeScreen = ({ navigation }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [userLikes, setUserLikes] = useState({});
+    const [userFavorites, setUserFavorites] = useState({});
     const [currentUserId, setCurrentUserId] = useState(null);
 
     useEffect(() => {
@@ -48,6 +49,7 @@ const HomeScreen = ({ navigation }) => {
         }
         setPosts(result.posts);
         setUserLikes(result.initialUserLikes);
+        setUserFavorites(result.initialUserFavorites);
         setLoadingPosts(false);
     };
 
@@ -99,6 +101,11 @@ const HomeScreen = ({ navigation }) => {
         if (favoritedPost === null) {
             signOut();
         }
+
+        setUserFavorites((prevFav) => ({
+            ...prevFav,
+            [postId]: favoritedPost,
+        }));
     };
 
     return (
@@ -145,6 +152,7 @@ const HomeScreen = ({ navigation }) => {
                                 handleToggleLike={handleToggleLike}
                                 navigation={navigation}
                                 userLikes={userLikes}
+                                userFavorites={userFavorites}
                             />
                         )}
                         contentContainerStyle={styles.postList}

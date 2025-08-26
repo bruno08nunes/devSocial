@@ -1,7 +1,14 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const PostItem = ({ item, handleToggleFavorite, handleToggleLike, userLikes, navigation }) => (
+const PostItem = ({
+    item,
+    handleToggleFavorite,
+    handleToggleLike,
+    userLikes,
+    navigation,
+    userFavorites,
+}) => (
     <View style={styles.postCard}>
         <View style={styles.postHeader}>
             {item.profile_picture_url ? (
@@ -58,7 +65,13 @@ const PostItem = ({ item, handleToggleFavorite, handleToggleLike, userLikes, nav
                 style={styles.interactionButton}
                 onPress={() => handleToggleFavorite(item.id)}
             >
-                <Ionicons name="bookmark-outline" size={24} color="#666" />
+                <Ionicons
+                    name={
+                        userFavorites[item.id] ? "bookmark" : "bookmark-outline"
+                    }
+                    size={24}
+                    color="#666"
+                />
             </TouchableOpacity>
         </View>
     </View>

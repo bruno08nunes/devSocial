@@ -18,7 +18,7 @@ export const favoritePost = async (postId) => {
             { headers: { Authorization: `Bearer ${userToken}` } }
         );
         Alert.alert("Sucesso", response.data.message);
-        return response;
+        return response.data.favorited;
     } catch (error) {
         console.error(
             "Erro ao favoritar/desfavoritar:",

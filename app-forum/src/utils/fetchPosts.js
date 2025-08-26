@@ -25,7 +25,26 @@ export const fetchPosts = async ({ searchTerm }) => {
             );
         }
 
-        return { initialUserLikes, posts: response.data };
+        let initialUserFavorites = {};
+        try {
+            const favoritesResponse = await api.get(`/users/favorites`, {
+                headers: {
+                    Authorization: `Bearer ${await AsyncStorage.getItem(
+                        "userToken"
+                    )}`,
+                },
+            });
+            favoritesResponse.data.forEach((favorite) => {
+                initialUserFavorites[favorite.post_id] = true;
+            });
+        } catch (favoritesError) {
+            console.error(
+                "Erro ao buscar favoritos do usuário para inicialização:",
+                favoritesError.response?.data || favoritesError.message
+            );
+        }
+
+        return { initialUserLikes, posts: response.data, initialUserFavorites };
     } catch (error) {
         console.error(
             "Erro ao buscar posts:",
