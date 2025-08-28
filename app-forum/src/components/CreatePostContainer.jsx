@@ -57,7 +57,7 @@ export default function CreatePostContainer({
             }
 
             let imageUrlToSave;
-            if (newPostContent) {
+            if (newPostImageUri) {
                 imageUrlToSave = await uploadImage({
                     currentUserId,
                     newPostImageUri,
